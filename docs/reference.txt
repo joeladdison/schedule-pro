@@ -1,0 +1,55 @@
+=== Date and time functions === 
+http://code.google.com/p/parsedatetime/
+    python module to parse date/time expressions
+
+http://pytz.sourceforge.net/
+    World Timezone definitions for python
+
+http://timezones.appspot.com/
+    Timezone support in Google App Engine
+    
+=== Database ===
+http://stackoverflow.com/questions/4059965/google-app-engine-get-entity-key-to-use-in-a-template
+    retrieve id of database entities
+
+http://code.google.com/appengine/docs/python/datastore/entities.html
+
+=== Templates ===
+http://www.webmonkey.com/2010/02/use_templates_in_django/
+    Django template introduction
+    
+http://docs.djangoproject.com/en/1.2/topics/templates/
+    Django template reference
+
+http://docs.djangoproject.com/en/1.2/ref/templates/builtins/
+    Django built-in template tags and filters
+
+http://stackoverflow.com/questions/2710861/how-to-import-modules-in-google-app-engine
+    fix_path from here
+
+http://groups.google.com/group/google-appengine-python/msg/945cfa92f6e1d046
+http://groups.google.com/group/google-appengine-python/browse_thread/thread/17a567bf74a38861
+http://groups.google.com/group/google-appengine-python/browse_thread/thread/89f984d9bbd83640
+    workaround for Django templates - nothing.py to set root of project
+
+http://stackoverflow.com/questions/5263623/templatedoesnotexist-on-python-app-engine-django-1-2-while-template-rendering-rel
+    template_loader override for Django templates
+
+=== Splitting files ===
+http://stackoverflow.com/questions/1966974/google-app-engine-how-do-i-split-code-into-multiple-files-webapp
+    splitting code into multiple files
+    
+http://code.google.com/appengine/docs/python/config/appconfig.html
+    app.yaml file contents description
+    
+http://groups.google.com/group/google-appengine/browse_thread/thread/f64cbc0742fb85c0/450ad627da4aa22a?show_docid=450ad627da4aa22a
+    separating main.py file into multiple files
+
+=== Example applications ===
+https://bitbucket.org/abernier/yab/src
+http://adam-bernier.appspot.com/
+    "yet another blog" source code - based on Google App Engine
+
+https://github.com/btbytes/teh
+http://teh.appspot.com/
+    TEH blog engine

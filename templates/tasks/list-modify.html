@@ -1,0 +1,42 @@
+{% extends 'shared/base_form.html' %}
+{%block pagetitle %}Schedule-Pro | Modify Task List{% endblock %}
+{%block extra_head %}
+<script src="/scripts/jquery.colorPicker.js" type="text/javascript"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+    $('#colour').colorPicker();
+});
+</script>
+<link href="/css/colorPicker.css" type="text/css" rel="stylesheet" />
+{% endblock %}
+
+{%block formtitle %}Modify Task List{% endblock %}
+{%block main_content %}
+    <form action="/tasks/list/edit/{{ tl.key }}" method="post">
+    <table>
+      <tr>
+        <td width="150">Name:</td>
+        <td width="300"><input name="tl_name" id="tl_name" type="text" value="{{ tl.name }}" /></td>
+      </tr>
+      <tr>
+        <td>Project:</td>
+        <td><select id="project" name="project">
+              <option value="None"{% if tl.project.key == None %} selected="selected"{% endif %}>Not assigned to Project</option>
+            {% for p in projects %}
+              <option value="{{ p.key }}"{% if p.key == tl.project.key %} selected="selected"{% endif %}>{{ p.name }}</option>
+            {% endfor %}
+            </select>
+        </td>
+      </tr>
+      <tr>
+        <td>Description:</td>
+        <td><input name="description" id="description" type="text" value="{{ tl.description }}" /></td>
+      </tr>
+      <tr>
+        <td><label for="colour">Colour</label></td>
+        <td><input name="colour" id="colour" type="text" value="{{ tl.colour }}" /></td>
+      </tr>
+    </table>
+    <input id="submit" name="submit" type="submit" value="Save Task List" />    
+    </form>
+{% endblock %}

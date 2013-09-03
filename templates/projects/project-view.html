@@ -1,0 +1,28 @@
+{% extends 'shared/base_form.html' %}
+{%block pagetitle %}Schedule-Pro | Project: {{ project.name }}{% endblock %}
+{%block extra_head %}
+{% endblock %}
+
+{%block formtitle %}Project: {{ project.name }}{% endblock %}
+{%block main_content %}
+    <table>
+      <tr>
+        <td width="150">Name:</td>
+        <td width="300">{{ project.name }}</td>
+      </tr>
+      <tr>
+        <td>Project Owner:</td>
+        <td>{{ project.owner.nickname }} ({{ project.owner.email }})</td>
+      </tr>
+      <tr>
+        <td>Description:</td>
+        <td>{{ project.description }}</td>
+      </tr>
+      <tr>
+        <td>Assigned Members:</td>
+        <td>&nbsp;</td>
+      </tr>
+    </table>
+    <p><a href="/projects/edit/{{ project.key }}">Edit Project</a></p> 
+    <p><a href="/projects">&lt; Back to Projects</a></p>
+{% endblock %}

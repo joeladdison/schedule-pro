@@ -1,0 +1,54 @@
+{% extends 'shared/base_form.html' %}
+{%block pagetitle %}Schedule-Pro | Event Details{% endblock %}
+{%block extra_head %}
+
+{% endblock %}
+
+{%block formtitle %}Event Details{% endblock %}
+{%block main_content %}
+    <table>
+      <tr>
+        <td width="150">Name:</td>
+        <td>{{ event.name }}</td>
+      </tr>
+      <tr>
+        <td>Calendar:</td>
+        <td>{{ calendar.name }}</td>
+      </tr>
+      <tr>
+        <td>Start Time:</td>
+        <td>{% if not event.all_day %}
+                {{ event.start_time|date:'d/m/Y g:i a' }}
+            {% else %}
+                {{ event.start_time|date:'d/m/Y' }}
+            {% endif %}
+        </td>
+      </tr>
+      <tr>
+        <td>End Time:</td>
+        <td>{% if not event.all_day %}
+                {{ event.end_time|date:'d/m/Y g:i a' }}
+            {% else %}
+                {{ event.end_time|date:'d/m/Y' }}
+            {% endif %}
+        </td>
+      </tr>
+      <tr>
+        <td>All Day Event:</td>
+        <td>{{ event.all_day }}</td>
+      </tr>
+      <tr>
+        <td>Location:</td>
+        <td>{{ event.location }}</td>
+      </tr>
+      <tr>
+        <td>Notes:</td>
+        <td>{{ event.notes }}</td>
+      </tr>
+      <tr>
+        <td>Event Sharing:</td>
+        <td>{{ event.sharing }}
+        </td>
+      </tr>
+    </table>
+{% endblock %}

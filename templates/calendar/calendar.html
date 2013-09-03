@@ -1,0 +1,138 @@
+{% extends 'shared/base.html' %}
+{%block pagetitle %}Schedule-Pro | Calendar{% endblock %}
+
+{%block extra_head %}
+<script type='text/javascript' src='scripts/fullcalendar/fullcalendar.min.js'></script>
+<script type="text/javascript" src="scripts/jquery.qtip-1.0.0-rc3.min.js"></script> 
+<script language="javascript" type="text/javascript">
+function load_calendar(cal_key, initialise) {
+	$.ajax({
+            url: '/ajax/c/details',
+            type: 'GET',
+            cache: 'false',
+            data: {calendar: cal_key},
+            dataType: 'json',
+            success: function(data){
+                cal_details = data;
+                ev_source = {
+                    url: '/ajax/c/events/' + cal_key,
+                    error: function() {
+                       alert('There was an error fetching the events');
+                    },
+                    color: cal_details.colour,
+                    textColor: 'white'
+                };
+                if (initialise == true) {
+                    // Do opposite to normal on page load so calendars are shown
+                    // if they were visible when the page was last closed
+                    cal_details.visible = !cal_details.visible;
+                }
+                if (cal_details.visible == true) {
+                    // Calendar currently visible, 
+                    // Remove the calendar from eventSources, and reload
+                    $('#calendar').fullCalendar('removeEventSource', ev_source);
+                    $("#cal-" + cal_key).css({'background-color': '#fff', 'color':'#000'});
+                } else {
+                    // Calendar is currently not visible
+                    // Add the calendar to eventSources, and reload
+                    $('#calendar').fullCalendar('addEventSource', ev_source);
+                    $("#cal-" + cal_key).css({'background-color': cal_details.colour, 'color': 'white'});
+                };
+                // Set the calendar to be visible/not visible
+                $.post(
+                        '/ajax/c/details',
+                        {calendar: cal_key, visible: !cal_details.visible} 
+                );
+            }
+	});
+};
+
+function initialise_calendar() {
+	$('div#calendar-list div').each(function() {
+		cal_key = this.id.slice(4);
+        load_calendar(cal_key, true);        
+	});
+}
+
+$(document).ready(function(){
+
+    $.ajaxSetup ({  
+        cache: false  
+    });
+    // Show small calendar in sidebar-left
+    $('#small_calendar').datepicker();
+    // List the calendars
+    $('div#calendar-list div').click(function() {
+        cal_key = this.id.slice(4);
+        load_calendar(cal_key, false);
+        return false;
+    });
+    // Set up the calendar view
+    $('#calendar').fullCalendar({
+        editable: false,
+    	header: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'agendaDay,agendaWeek,month'
+        },
+        defaultView: 'month',
+        eventRender: function(event, element, view)
+        {
+            element.qtip({ 
+                content: {
+                    title: {text: event.title, button: 'x' },
+                    
+                    text: "Start: " + event.start
+                },
+                position: {
+                    corner: { tooltip: 'bottomMiddle', target: 'topMiddle' },
+                    adjust: {screen: true }
+                },
+                show: 'click',
+                hide: 'unfocus',
+                style: {
+                    background: 'white',
+                    border: { color: '#ABABAB', radius: 5 },
+                    tip: true
+                }
+            });
+        },
+        eventClick: function(event) {
+            if (event.url) {
+                // Don't go to the Event Details page when event is clicked
+                return false;
+            }
+        }
+    });
+    // Load the calendars
+    initialise_calendar();
+});
+</script>
+<link href="/css/demo_table_jui.css" type="text/css" rel="stylesheet" />
+<link rel='stylesheet' type='text/css' href='scripts/fullcalendar/fullcalendar.css' />
+{% endblock %}
+
+{%block title %} | Calendar{% endblock %}
+
+{%block sidebar-left %}
+    <div class="panel">
+        <div id="small_calendar"></div>
+    </div>
+    <div class="panel">
+        <h3>My Calendars</h3>
+        <div id="calendar-list">
+        {% for cal in calendars %}
+            <div id="cal-{{ cal.key }}" class="button" style="background-color:{{ cal.colour }}">{{ cal.name }}</div>
+        {% endfor %}
+        </div>
+        <p class="small-links"><a href="/calendar/add">Add Calendar</a></p>
+    </div>
+{% endblock %}
+
+{%block main_content %}
+<p><a href="/calendar/event/add">Add Event</a></p>
+<div style="width:700px">
+    <div id="calendar"></div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends 'shared/base_form.html' %}
+{%block pagetitle %}Schedule-Pro | Add Task{% endblock %}
+{%block extra_head %}
+<script language="javascript" type="text/javascript">
+$(function() {
+	$.datepicker.setDefaults({ dateFormat: 'yy-mm-dd' });
+    $("#start_date").datepicker();
+    $("#due_date").datepicker();
+    // Setup progress slider
+    $( "#progress_slider" ).slider({
+        value: 0,
+        orientation: "horizontal",
+        range: "min",
+        min: 0,
+        max: 100,
+        animate: true,
+        slide: function(event, ui) {
+            $("#complete").val(ui.value);
+        }
+    });
+    $("#complete").change(function() {
+        $("#progress_slider").slider("value", this.value);
+    });
+});
+</script>
+{% endblock %}
+
+{%block formtitle %}Add Task{% endblock %}
+{%block main_content %}
+    <form action="/tasks/task/add" method="post">
+    <table>
+      <tr>
+        <td width="150">Name:</td>
+        <td width="300"><input name="task_name" id="task_name" type="text" /></td>
+      </tr>
+      <tr>
+        <td>Task List:</td>
+        <td><select id="task_list" name="task_list">
+            {% for tl in task_lists %}
+              <option value="{{ tl.key }}">{{ tl.name }}</option>
+            {% endfor %}
+            </select>
+        </td>
+      </tr>
+      <tr>
+        <td>Start Date:</td>
+        <td><input name="start_date" id="start_date" type="text" value="{% now "Y-m-d" %}" /></td>
+      </tr>
+      <tr>
+        <td>Due Date:</td>
+        <td><input name="due_date" id="due_date" type="text" value="{% now "Y-m-d" %}" /></td>
+      </tr>
+      <tr>
+        <td>Percent Complete:</td>
+        <td>
+          <input name="complete" id="complete" type="text" style="width:30px;border:0;font-size:14px;text-align:right;" value="0" />%
+          <div id="progress_slider" style="width:150px;z-index:0;margin:5px 0 0 10px;"></div>
+        </td>
+      </tr>
+    </table>
+    <input id="submit" name="submit" type="submit" value="Add Task" />    
+    </form>
+{% endblock %}

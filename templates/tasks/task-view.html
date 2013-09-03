@@ -1,0 +1,48 @@
+{% extends 'shared/base_form.html' %}
+{%block pagetitle %}Schedule-Pro | Task: {{ task.name }}{% endblock %}
+{%block extra_head %}
+<script language="javascript" type="text/javascript">
+$(function() {
+    // Setup progressbar
+    $( "#progressbar" ).progressbar({
+        value: {{ task.percent_complete }},
+    });
+});
+</script>
+{% endblock %}
+
+{%block formtitle %}Task: {{ task.name }}{% endblock %}
+{%block main_content %}
+    <table>
+      <tr>
+        <td width="150">Name:</td>
+        <td width="300">{{ task.name }}</td>
+      </tr>
+      <tr>
+        <td>Task List:</td>
+        <td>{{ task.task_list.name }}</td>
+      </tr>
+      <tr>
+        <td>Start Date:</td>
+        <td>{{ task.start_date|date:'Y-m-d' }}</td>
+      </tr>
+      <tr>
+        <td>Due Date:</td>
+        <td>{{ task.due_date|date:'Y-m-d' }}</td>
+      </tr>
+      <tr>
+        <td>Percent Complete:</td>
+        <td>
+          <div id="progressbar" style="width:150px;height:20px;">
+              <span style="position:absolute; margin-left:55px; line-height:20px;">{{ task.percent_complete }}%</span>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>Notes:</td>
+        <td>{{ task.notes|default:'No notes entered.' }}</td>
+      </tr>
+    </table>
+    <p><a href="/tasks/task/edit/{{ task.key }}">Edit Task</a></p> 
+    <p><a href="/tasks">&lt; Back to Tasks</a></p>
+{% endblock %}

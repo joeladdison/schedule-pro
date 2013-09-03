@@ -1,0 +1,76 @@
+{% extends 'shared/base_form.html' %}
+{%block pagetitle %}Schedule-Pro | Modify Task{% endblock %}
+{%block extra_head %}
+<script language="javascript" type="text/javascript">
+$(function() {
+    // Initialise Date Picker for start and due dates
+	$.datepicker.setDefaults({ dateFormat: 'yy-mm-dd' });
+    $("#start_date").datepicker();
+    $("#due_date").datepicker();
+    // Setup progress slider
+    $( "#progress_slider" ).slider({
+        value: {{ task.percent_complete }},
+        orientation: "horizontal",
+        range: "min",
+        min: 0,
+        max: 100,
+        animate: true,
+        slide: function(event, ui) {
+            $("#complete").val(ui.value);
+        }
+    });
+    $("#complete").change(function() {
+        $("#progress_slider").slider("value", this.value);
+    });
+});
+</script>
+{% endblock %}
+
+{%block formtitle %}Modify Task{% endblock %}
+{%block main_content %}
+    <form action="/tasks/task/edit/{{ task.key }}" method="post">
+    <table>
+      <tr>
+        <td width="150">Name:</td>
+        <td width="300"><input name="task_name" id="task_name" type="text" value="{{ task.name }}" /></td>
+      </tr>
+      <tr>
+        <td>Task List:</td>
+        <td><select id="task_list" name="task_list">
+            {% for tl in task_lists %}
+              <option value="{{ tl.key }}"{% if tl.key == task.task_list.key %} selected="selected"{% endif %}>{{ tl.name }}</option>
+            {% endfor %}
+            </select>
+        </td>
+      </tr>
+      <tr>
+        <td>Parent Task:</td>
+        <td><select id="parent_task" name="parent_task">
+              <option value="None"{% if task.parent_task.key == None %} selected="selected"{% endif %}>No Parent</option>
+            {% for t in tasks %}
+              {% if t.key != task.key %}
+              <option value="{{ t.key }}"{% if task.parent_task.key == t.key %} selected="selected"{% endif %}>{{ t.name }}</option>
+              {% endif %}
+            {% endfor %}
+            </select>
+        </td>
+      </tr>
+      <tr>
+        <td>Start Date:</td>
+        <td><input name="start_date" id="start_date" type="text" value="{{ task.start_date|date:'Y-m-d' }}" /></td>
+      </tr>
+      <tr>
+        <td>Due Date:</td>
+        <td><input name="due_date" id="due_date" type="text" value="{{ task.due_date|date:'Y-m-d' }}" /></td>
+      </tr>
+      <tr>
+        <td>Percent Complete:</td>
+        <td>
+          <input name="complete" id="complete" type="text" style="width:30px;border:0;font-size:14px;text-align:right;" value="{{ task.percent_complete }}" />%
+          <div id="progress_slider" style="width:150px;z-index:0;margin:5px 0 0 10px;"></div>
+        </td>
+      </tr>
+    </table>
+    <input id="submit" name="submit" type="submit" value="Save Task" />    
+    </form>
+{% endblock %}

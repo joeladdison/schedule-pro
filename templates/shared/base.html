@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{%block pagetitle %}{% endblock %}</title>
+<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/themes/cupertino/jquery-ui.css" type="text/css" rel="stylesheet" />
+<link href="/css/main.css" type="text/css" rel="stylesheet" />
+<!-- Work in IE7 mode and don't show IE image toolbar-->
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+<meta http-equiv="imagetoolbar" content="no" />
+<script src="https://www.google.com/jsapi?key=ABQIAAAAbkwp-dP-ETWYCUsbwIxkDxTU5-k8-bqYJT0khSUvzwYcQldkdhS8Dth9wWyKIqS6Q5bbyAxUp8ZmVQ" type="text/javascript"></script>
+<script language="Javascript" type="text/javascript">
+    //<![CDATA[
+
+    google.load("jquery", "1.6.0");
+    google.load("jqueryui", "1.8.12");
+
+    //]]>
+</script>
+{%block extra_head %}{% endblock %}
+</head>
+
+<body>
+<div id="head-toolbar">
+	<div style="float:left;">
+	   <a href="/calendar">Calendar</a> | <a href="/tasks">Tasks</a> | <a href="/projects">Projects</a>
+	</div>
+	<div style="float:right;">
+	   {{ user_message|safe }}
+	</div>
+</div>
+
+<div id="header">
+    <h2>Schedule-Pro{%block title %}{% endblock %}</h2> 
+</div>
+
+<div id="sidebar-left">
+{%block sidebar-left %}{% endblock %}
+</div>
+<div id="main-content">
+{%block main_content %}{% endblock %}
+</div>
+<div id="sidebar-right">
+{%block sidebar-right %}{% endblock %}
+</div>
+</body>
+</html>

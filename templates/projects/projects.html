@@ -1,0 +1,47 @@
+{% extends 'shared/base.html' %}
+{%block pagetitle %}Schedule-Pro | Projects{% endblock %}
+
+{%block extra_head %}
+<script language="javascript" type="text/javascript">
+$(document).ready(function(){
+	$.ajaxSetup ({  
+	    cache: false  
+	}); 
+    $('div#project-list div').click(function() {
+        proj_key = this.id.slice(5);
+        details_url = "/ajax/p/details/" + proj_key;
+        $("#proj-details").load(details_url);
+        return false;
+    });
+});
+
+ 
+//var ajax_load = "<img src='img/load.gif' alt='loading...' />";  
+
+//load() functions  
+//var loadUrl = "ajax/load.php";  
+//$("#load_basic").click(function(){  
+//    $("#result").html(ajax_load).load(loadUrl);  
+//});
+</script>
+{% endblock %}
+
+{%block title %} | Projects{% endblock %}
+
+{%block sidebar-left %}
+    <h3>My Projects</h3>
+    <div class="panel">
+        <div id="project-list">
+        {% for project in projects %}
+            <div id="proj-{{ project.key }}" class="button" style="background-color:{{ project.colour }}">{{ project.name }}</div>
+        {% endfor %}
+        </div>
+        <p class="small-links"><a href="/projects/add">Add Project</a></p>
+	</div>
+{% endblock %}
+
+{%block main_content %}
+    <div id="proj-details">
+        <p>&lt;-- Click on a project in the list to get started.</p>
+    </div>
+{% endblock %}

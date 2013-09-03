@@ -1,0 +1,48 @@
+{% extends 'shared/base_form.html' %}
+{%block pagetitle %}Schedule-Pro | Modify Calendar{% endblock %}
+{%block extra_head %}
+<script src="/scripts/jquery.colorPicker.js" type="text/javascript"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+    $('#colour').colorPicker();
+});
+</script>
+<link href="/css/colorPicker.css" type="text/css" rel="stylesheet" />
+{% endblock %}
+
+{%block formtitle %}Modify Calendar{% endblock %}
+{%block main_content %}
+    <form action="/calendar/edit/{{ calendar.key }}" method="post">
+    <table>
+      <tr>
+        <td width="150">Name:</td>
+        <td width="300"><input name="name" id="name" type="text" value="{{ calendar.name }}" /></td>
+      </tr>
+      <tr>
+        <td>Share Type:</td>
+        <td>
+            <select id="share_type" name="share_type">
+              <option value="hybrid"{% if calendar.key == "hybrid" %} selected="selected"{% endif %}>Hybrid Sharing</option>
+              <option value="all_shared"{% if calendar.key == "all_shared" %} selected="selected"{% endif %}>All Shared</option>
+              <option value="not_shared"{% if calendar.key == "not_shared" %} selected="selected"{% endif %}>Not Shared</option>
+            </select>
+        </td>
+      </tr>
+      <tr>
+        <td><label for="colour">Colour</label></td>
+        <td><input name="colour" id="colour" type="text" value="{{ calendar.colour }}" /></td>
+      </tr>
+      <tr>
+        <td>Project:</td>
+        <td><select id="project" name="project">
+              <option value="None"{% if calendar.project.key == None %} selected="selected"{% endif %}>Not assigned to Project</option>
+            {% for p in projects %}
+              <option value="{{ p.key }}"{% if p.key == calendar.project.key %} selected="selected"{% endif %}>{{ p.name }}</option>
+            {% endfor %}
+            </select>
+        </td>
+      </tr>
+    </table>
+    <input id="submit" name="submit" type="submit" value="Save Calendar" />    
+    </form>
+{% endblock %}

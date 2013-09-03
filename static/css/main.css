@@ -1,0 +1,73 @@
+/* Main css for Schedule-Pro website */
+body {
+    margin: 0px;
+    padding: 0px;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 14px;
+}
+
+#head-toolbar {
+    padding: 2px 5px 2px 5px;
+    height: 26px;
+    line-height: 26px;
+    border-bottom: 2px blue solid;
+}
+
+#header {
+    border-bottom: 1px solid #999;
+}
+
+#main-content {
+	float: left;
+    padding: 5px;
+}
+
+#sidebar-left {
+	border-right: 1px solid #999;
+	padding: 5px;
+	float: left;
+	width: 200px;
+}
+
+#sidebar-left h3 {
+	margin:0;
+}
+
+#sidebar-left div.panel {
+    border-bottom: 1px solid #ccc;
+    padding: 3px 0px;
+}
+
+#sidebar-right {
+    width: 200px;    	
+}
+
+/* Sidebar button styling */
+div.button {
+    color:#fff;
+    padding: 0px 20px 0px 5px;
+    line-height: 18px;
+    font-size: 12px;
+    overflow: hidden;
+    cursor: pointer;	
+    border: 1px dashed #666;
+    margin-bottom: 3px;
+}
+
+.small-links {
+	font-size: x-small;
+}
+
+/* Forms styling */
+input.datetime {
+	width: 100px;
+} 
+
+/* jQuery UI datepicker */
+.ui-datepicker {
+    font-size: 12px !important;
+}
+
+#small_calendar .ui-datepicker{
+	width: 190px;
+}
