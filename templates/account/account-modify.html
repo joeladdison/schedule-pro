@@ -10,7 +10,7 @@
     <table>
       <tr>
         <td width="150">Email Address:</td>
-        <td width="300">{{ user.email }}</td>
+        <td width="300">{{ user.email() }}</td>
       </tr>
       <tr>
         <td>First Name:</td>
@@ -21,6 +21,6 @@
         <td><input name="last_name" id="last_name" type="text" value="{{ account.last_name }}" /></td>
       </tr>
     </table>
-    <input id="submit" name="submit" type="submit" text="Update Account" />    
+    <input id="submit" name="submit" type="submit" text="Update Account" />
     </form>
 {% endblock %}

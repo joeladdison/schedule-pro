@@ -12,7 +12,7 @@ $(document).ready(function(){
 
 {%block formtitle %}Modify Task List{% endblock %}
 {%block main_content %}
-    <form action="/tasks/list/edit/{{ tl.key }}" method="post">
+    <form action="/tasks/list/edit/{{ tl.key.urlsafe() }}" method="post">
     <table>
       <tr>
         <td width="150">Name:</td>
@@ -23,7 +23,7 @@ $(document).ready(function(){
         <td><select id="project" name="project">
               <option value="None"{% if tl.project.key == None %} selected="selected"{% endif %}>Not assigned to Project</option>
             {% for p in projects %}
-              <option value="{{ p.key }}"{% if p.key == tl.project.key %} selected="selected"{% endif %}>{{ p.name }}</option>
+              <option value="{{ p.key.urlsafe() }}"{% if p.key == tl.project %} selected="selected"{% endif %}>{{ p.name }}</option>
             {% endfor %}
             </select>
         </td>
@@ -37,6 +37,6 @@ $(document).ready(function(){
         <td><input name="colour" id="colour" type="text" value="{{ tl.colour }}" /></td>
       </tr>
     </table>
-    <input id="submit" name="submit" type="submit" value="Save Task List" />    
+    <input id="submit" name="submit" type="submit" value="Save Task List" />
     </form>
 {% endblock %}

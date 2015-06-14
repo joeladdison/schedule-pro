@@ -4,67 +4,67 @@
 #
 # Database Models
 
-from google.appengine.ext import db
-from google.appengine.api import users
+from google.appengine.ext import ndb
 
-class UserAccount(db.Model):
+
+class UserAccount(ndb.Model):
     """ Defines a class for storing user information """
-    first_name = db.StringProperty()
-    last_name = db.StringProperty()
-    user = db.UserProperty()
-    
+    first_name = ndb.StringProperty()
+    last_name = ndb.StringProperty()
+    userid = ndb.StringProperty()
+
     @property
     def name(self):
         """ Returns the name of the user - "First Last" """
         return "%s %s" % (self.first_name, self.last_name)
-    
-    
-class Project(db.Model):
-    name = db.StringProperty()
-    owner = db.ReferenceProperty(UserAccount)
-    description = db.StringProperty(multiline=True)
-    members = db.ListProperty(users.User)
-    colour = db.StringProperty()
-    
 
-class TaskList(db.Model):
+
+class Project(ndb.Model):
+    name = ndb.StringProperty()
+    owner = ndb.KeyProperty(kind=UserAccount)
+    description = ndb.StringProperty()
+    members = ndb.KeyProperty(kind=UserAccount, repeated=True)
+    colour = ndb.StringProperty()
+
+
+class TaskList(ndb.Model):
     """ Defines a database model for storing TaskLists """
-    name = db.StringProperty()
-    owner = db.ReferenceProperty(UserAccount)
-    description = db.StringProperty(multiline=True)
-    project = db.ReferenceProperty(Project)
-    colour = db.StringProperty()
-    
-    
-class Task(db.Model):
+    name = ndb.StringProperty()
+    owner = ndb.KeyProperty(kind=UserAccount)
+    description = ndb.StringProperty()
+    project = ndb.KeyProperty(kind=Project)
+    colour = ndb.StringProperty()
+
+
+class Task(ndb.Model):
     """ Defines a database model for storing Tasks """
-    owner = db.ReferenceProperty(UserAccount)
-    name = db.StringProperty(multiline=False)
-    task_list = db.ReferenceProperty(TaskList) #reference to a TaskList
-    due_date = db.DateTimeProperty()
-    start_date = db.DateTimeProperty()
-    percent_complete = db.IntegerProperty() 
-    assigned_members = db.ListProperty(users.User) #list of Users
-    notes = db.TextProperty()
-    parent_task = db.SelfReferenceProperty(collection_name='parent_set')
+    owner = ndb.KeyProperty(kind=UserAccount)
+    name = ndb.StringProperty()
+    task_list = ndb.KeyProperty(kind=TaskList)
+    due_date = ndb.DateTimeProperty()
+    start_date = ndb.DateTimeProperty()
+    percent_complete = ndb.IntegerProperty()
+    assigned_members = ndb.KeyProperty(kind=UserAccount, repeated=True)
+    notes = ndb.TextProperty()
+    parent_task = ndb.KeyProperty(kind='Task')
     # add data by passing parent=xx to store who owns the task
-    
 
-class Calendar(db.Model):
-    name = db.StringProperty()
-    owner = db.ReferenceProperty(UserAccount)
-    share_type = db.StringProperty()
-    colour = db.StringProperty()
-    visible = db.BooleanProperty()
-    project = db.ReferenceProperty(Project)
-    
 
-class Event(db.Model):
-    name = db.StringProperty()
-    start_time = db.DateTimeProperty()
-    end_time = db.DateTimeProperty()
-    all_day = db.BooleanProperty()
-    calendar = db.ReferenceProperty(Calendar)
-    location = db.StringProperty(multiline=True)
-    notes = db.TextProperty()
-    sharing = db.StringProperty()
+class Calendar(ndb.Model):
+    name = ndb.StringProperty()
+    owner = ndb.KeyProperty(kind=UserAccount)
+    share_type = ndb.StringProperty()
+    colour = ndb.StringProperty()
+    visible = ndb.BooleanProperty()
+    project = ndb.KeyProperty(kind=Project)
+
+
+class Event(ndb.Model):
+    name = ndb.StringProperty()
+    start_time = ndb.DateTimeProperty()
+    end_time = ndb.DateTimeProperty()
+    all_day = ndb.BooleanProperty()
+    calendar = ndb.KeyProperty(kind=Calendar)
+    location = ndb.StringProperty()
+    notes = ndb.TextProperty()
+    sharing = ndb.StringProperty()

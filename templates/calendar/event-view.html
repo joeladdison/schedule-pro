@@ -18,18 +18,18 @@
       <tr>
         <td>Start Time:</td>
         <td>{% if not event.all_day %}
-                {{ event.start_time|date:'d/m/Y g:i a' }}
+                {{ event.start_time.strftime('%d/%m/%Y %-I:%M %p') }}
             {% else %}
-                {{ event.start_time|date:'d/m/Y' }}
+                {{ event.start_time.strftime('%d/%m/%Y') }}
             {% endif %}
         </td>
       </tr>
       <tr>
         <td>End Time:</td>
         <td>{% if not event.all_day %}
-                {{ event.end_time|date:'d/m/Y g:i a' }}
+                {{ event.end_time.strftime('%d/%m/%Y %-I:%M %p') }}
             {% else %}
-                {{ event.end_time|date:'d/m/Y' }}
+                {{ event.end_time.strftime('%d/%m/%Y') }}
             {% endif %}
         </td>
       </tr>

@@ -7,7 +7,7 @@
 $(function() {
 	{% for task in tasks %}
     // Setup progressbars
-    $( ".progressbar-{{ task.key.id }}" ).progressbar({
+    $( ".progressbar-{{ task.key.integer_id() }}" ).progressbar({
         value: {{ task.percent_complete }},
     });
     {% endfor %}
@@ -16,12 +16,12 @@ $(function() {
         "bJQueryUI": true,
         "bAutoWidth":true,
         "sPaginationType": "full_numbers"
-    }); 
+    });
 });
 $(document).ready(function(){
-    $.ajaxSetup ({  
-        cache: false  
-    }); 
+    $.ajaxSetup ({
+        cache: false
+    });
     $('div#tasklist-list div').click(function() {
         tl_key = this.id.slice(3);
         details_url = "/ajax/tl/tasks/" + tl_key;
@@ -35,12 +35,12 @@ $(document).ready(function(){
 
 {%block title %} | Tasks{% endblock %}
 
-{%block sidebar-left %}
+{%block sidebar_left %}
     <h3>My Task Lists</h3>
     <div class="panel">
         <div id="tasklist-list">
         {% for tl in task_lists %}
-            <div id="tl-{{ tl.key }}" class="button" style="background-color:{{ tl.colour }}">{{ tl.name }}</div>
+            <div id="tl-{{ tl.key.urlsafe() }}" class="button" style="background-color:{{ tl.colour }}">{{ tl.name }}</div>
         {% endfor %}
         </div>
         <p class="small-links"><a href="/tasks/list/add">Add Task List</a></p>
@@ -62,15 +62,15 @@ $(document).ready(function(){
       <tbody>
       {% for task in tasks %}
         <tr align="center">
-            <td align="left"><a href="/tasks/task/view/{{ task.key }}">{{ task.name }}</a></td>
-            <td>{{ task.start_date|date:"Y-m-d" }}</td>
-            <td>{{ task.due_date|date:"Y-m-d" }}</td>
+            <td align="left"><a href="/tasks/task/view/{{ task.key.urlsafe() }}">{{ task.name }}</a></td>
+            <td>{{ task.start_date.strftime("%Y-%m-%d") }}</td>
+            <td>{{ task.due_date.strftime("%Y-%m-%d") }}</td>
             <td>
-                <div class="progressbar-{{ task.key.id }}" style="width:100px;height:20px;">
+                <div class="progressbar-{{ task.key.integer_id() }}" style="width:100px;height:20px;">
                     <span style="position:absolute; margin-left:35px; line-height:20px;">{{ task.percent_complete }}%</span>
                 </div>
             </td>
-            <td><a href="/tasks/task/edit/{{ task.key }}">Edit</a></td>
+            <td><a href="/tasks/task/edit/{{ task.key.urlsafe() }}">Edit</a></td>
         </tr>
       {% endfor %}
       </tbody>

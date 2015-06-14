@@ -23,6 +23,6 @@
         <td>&nbsp;</td>
       </tr>
     </table>
-    <p><a href="/projects/edit/{{ project.key }}">Edit Project</a></p> 
+    <p><a href="/projects/edit/{{ project.key.urlsafe() }}">Edit Project</a></p>
     <p><a href="/projects">&lt; Back to Projects</a></p>
 {% endblock %}

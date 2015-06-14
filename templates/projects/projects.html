@@ -4,9 +4,9 @@
 {%block extra_head %}
 <script language="javascript" type="text/javascript">
 $(document).ready(function(){
-	$.ajaxSetup ({  
-	    cache: false  
-	}); 
+	$.ajaxSetup ({
+	    cache: false
+	});
     $('div#project-list div').click(function() {
         proj_key = this.id.slice(5);
         details_url = "/ajax/p/details/" + proj_key;
@@ -15,25 +15,25 @@ $(document).ready(function(){
     });
 });
 
- 
-//var ajax_load = "<img src='img/load.gif' alt='loading...' />";  
 
-//load() functions  
-//var loadUrl = "ajax/load.php";  
-//$("#load_basic").click(function(){  
-//    $("#result").html(ajax_load).load(loadUrl);  
+//var ajax_load = "<img src='img/load.gif' alt='loading...' />";
+
+//load() functions
+//var loadUrl = "ajax/load.php";
+//$("#load_basic").click(function(){
+//    $("#result").html(ajax_load).load(loadUrl);
 //});
 </script>
 {% endblock %}
 
 {%block title %} | Projects{% endblock %}
 
-{%block sidebar-left %}
+{%block sidebar_left %}
     <h3>My Projects</h3>
     <div class="panel">
         <div id="project-list">
         {% for project in projects %}
-            <div id="proj-{{ project.key }}" class="button" style="background-color:{{ project.colour }}">{{ project.name }}</div>
+            <div id="proj-{{ project.key.urlsafe() }}" class="button" style="background-color:{{ project.colour }}">{{ project.name }}</div>
         {% endfor %}
         </div>
         <p class="small-links"><a href="/projects/add">Add Project</a></p>

@@ -4,8 +4,7 @@
 #
 # Calendar interface
 
-from google.appengine.ext import db
-from google.appengine.api import users
+from google.appengine.ext import ndb
 
 import cgi
 from datetime import datetime
@@ -13,41 +12,43 @@ import models
 import views
 import common
 
+
 class CalendarHandler(views.BaseHandler):
     def get(self):
         """ Renders the Calendar page of the website """
-        calendars = models.Calendar.all()
-        calendars.filter("owner = ", common.get_current_user())
-        calendars.order("name")
+        calendars = models.Calendar.query() \
+            .filter(models.Calendar.owner == common.get_current_user().key) \
+            .order(models.Calendar.name)
         self.render('calendar.html', 'calendar', {'calendars': calendars})
 
 
 class CalendarCreateHandler(views.BaseHandler):
     def get(self):
         """ Renders the Create Calendar page of the website """
-        projects = models.Project.all()
-        projects.filter("owner = ", common.get_current_user())
-        projects.order("name")
-        
+        projects = models.Project.query() \
+            .filter(models.Project.owner == common.get_current_user().key) \
+            .order(models.Project.name)
+
         rand_col = common.get_rand_colour()
-        self.render('calendar-create.html', 'calendar', {'rand_col':rand_col,
-                                                  'projects':projects})
-        
+        self.render(
+            'calendar-create.html', 'calendar',
+            {'rand_col': rand_col, 'projects': projects})
+
     def post(self):
         """ Process the new Calendar data, to store in the database """
         name = cgi.escape(self.request.get('name'))
         share_type = self.request.get('share_type')
         colour = cgi.escape(self.request.get('colour'))
-        
+
         try:
-            project = db.key(self.request.get('project'))
-        except AttributeError:
+            project = ndb.Key(urlsafe=self.request.get('project'))
+        except:
             # Set project to None, as project was set to 'none' by user
             project = None
-                
+
         # Save the data to the database
         calendar = models.Calendar()
-        calendar.owner = common.get_current_user()
+        calendar.owner = common.get_current_user().key
         calendar.name = name
         calendar.share_type = share_type
         calendar.colour = colour
@@ -62,37 +63,38 @@ class CalendarCreateHandler(views.BaseHandler):
 class CalendarModifyHandler(views.BaseHandler):
     def get(self, cal_key):
         """ Renders the Modify Calendar form to the user """
-        calendar = db.get(cal_key)
-        
-        projects = models.Project.all()
-        projects.filter("owner = ", common.get_current_user())
-        projects.order("name")
-        
-        self.render('calendar-modify.html', 'calendar', {'projects':projects,
-                                                  'calendar':calendar})
-    
+        calendar = cal_key.get()
+
+        projects = models.Project.query() \
+            .filter(models.Project.owner == common.get_current_user().key) \
+            .order(models.Project.name)
+
+        self.render(
+            'calendar-modify.html', 'calendar',
+            {'projects': projects, 'calendar': calendar})
+
     def post(self, cal_key):
         """ Process the new Calendar data, to store in the database """
         name = cgi.escape(self.request.get('name'))
         share_type = self.request.get('share_type')
         colour = cgi.escape(self.request.get('colour'))
-        
+
         try:
-            project = db.key(self.request.get('project'))
-        except AttributeError:
+            project = ndb.Key(urlsafe=self.request.get('project'))
+        except:
             # Set project to None, as project was set to 'none' by user
             project = None
-                
+
         # Save the data to the database
-        calendar = db.get(cal_key)
-        calendar.owner = common.get_current_user()
+        calendar = cal_key.get()
+        calendar.owner = common.get_current_user().key
         calendar.name = name
         calendar.share_type = share_type
         calendar.colour = colour
         calendar.visible = calendar.visible
         calendar.project = project
         calendar.put()
-        
+
         # Redirect the user to the Calendar page after saving the calendar
         self.redirect('/calendar')
 
@@ -100,12 +102,12 @@ class CalendarModifyHandler(views.BaseHandler):
 class EventCreateHandler(views.BaseHandler):
     def get(self):
         """ Renders the Create Event form to the user """
-        calendars = models.Calendar.all()
-        calendars.filter("owner = ", common.get_current_user())
-        calendars.order("name")
-        
-        self.render('event-create.html', 'calendar', {'calendars':calendars})
-        
+        calendars = models.Calendar.query() \
+            .filter(models.Calendar.owner == common.get_current_user().key) \
+            .order(models.Calendar.name)
+
+        self.render('event-create.html', 'calendar', {'calendars': calendars})
+
     def post(self):
         """ Process the Event data to store in the database """
         name = cgi.escape(self.request.get('name'))
@@ -113,11 +115,11 @@ class EventCreateHandler(views.BaseHandler):
         start_time = self.request.get('start_time')
         end_date = self.request.get('end_date')
         end_time = self.request.get('end_time')
-        calendar = db.Key(self.request.get('calendar'))
+        calendar = ndb.Key(urlsafe=self.request.get('calendar'))
         location = cgi.escape(self.request.get('location'))
         notes = cgi.escape(self.request.get('notes'))
         sharing = self.request.get('sharing')
-        
+
         if self.request.get('all_day') == "1":
             all_day = True
             start = start_date
@@ -131,52 +133,54 @@ class EventCreateHandler(views.BaseHandler):
 
         # Change strings into datetime for database
         start_dt = datetime.strptime(start, time_format)
-        end_dt = datetime.strptime(start, time_format)
+        end_dt = datetime.strptime(end, time_format)
 
         # Store the event in the database
         event = models.Event()
-        event.name = name #db.StringProperty()
-        event.start_time = start_dt #db.DateTimeProperty()
-        event.end_time = end_dt #db.DateTimeProperty()
-        event.all_day = all_day #db.BooleanProperty()
-        event.calendar = calendar #db.ReferenceProperty()
-        event.location = location #db.StringProperty(multiline=True)
-        event.notes = notes #db.TextProperty()
-        event.sharing = sharing #db.StringProperty()
+        event.name = name  # db.StringProperty()
+        event.start_time = start_dt  # db.DateTimeProperty()
+        event.end_time = end_dt  # db.DateTimeProperty()
+        event.all_day = all_day  # db.BooleanProperty()
+        event.calendar = calendar  # db.ReferenceProperty()
+        event.location = location  # db.StringProperty(multiline=True)
+        event.notes = notes  # db.TextProperty()
+        event.sharing = sharing  # db.StringProperty()
         event.put()
-        
-        #self.response.out.write(start_dt)
-        #self.response.out.write("&nbsp;&nbsp;,&nbsp;&nbsp;")
-        #self.response.out.write(end_dt)
-        #self.response.out.write("<br /><br />")
-        #self.response.out.write((name, start_date, start_time, end_date, end_time))
-        #self.response.out.write(str(all_day))
-        
+
+        # self.response.out.write(start_dt)
+        # self.response.out.write("&nbsp;&nbsp;,&nbsp;&nbsp;")
+        # self.response.out.write(end_dt)
+        # self.response.out.write("<br /><br />")
+        # self.response.out.write((name, start_date, start_time, end_date, end_time))
+        # self.response.out.write(str(all_day))
+
         # Redirect user to Calendar page after saving the event
         self.redirect('/calendar')
-    
+
+
 class EventModifyHandler(views.BaseHandler):
     def get(self, event_key):
         """ Render the Modify Event form to the user """
-        event = db.get(event_key)
-        
-        calendars = models.Calendar.all()
-        calendars.filter("owner = ", common.get_current_user())
-        calendars.order("name")
-        
-        self.render('event-modify.html', 'calendar', {'event':event,
-                                                  'calendars':calendars})
+        event = event_key.get()
+
+        calendars = models.Calendar.query() \
+            .filter(models.Calendar.owner == common.get_current_user().key) \
+            .order(models.Calendar.name)
+
+        self.render(
+            'event-modify.html', 'calendar',
+            {'event': event, 'calendars': calendars})
 
     def post(self, event_key):
         pass
-    
+
 
 class EventViewHandler(views.BaseHandler):
     def get(self, event_key):
         """ Render the Event Details page of the website """
-        event = db.get(event_key)
-        calendar = db.get(event.calendar.key())
-        
-        self.render('event-view.html', 'calendar', {'event':event,
-                                                  'calendar':calendar})
-    
+        event = event_key.get()
+        calendar = event.calendar.key.get()
+
+        self.render(
+            'event-view.html', 'calendar',
+            {'event': event, 'calendar': calendar})

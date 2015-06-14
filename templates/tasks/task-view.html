@@ -24,11 +24,11 @@ $(function() {
       </tr>
       <tr>
         <td>Start Date:</td>
-        <td>{{ task.start_date|date:'Y-m-d' }}</td>
+        <td>{{ task.start_date.strftime('%Y-%m-%d') }}</td>
       </tr>
       <tr>
         <td>Due Date:</td>
-        <td>{{ task.due_date|date:'Y-m-d' }}</td>
+        <td>{{ task.due_date.strftime('%Y-%m-%d') }}</td>
       </tr>
       <tr>
         <td>Percent Complete:</td>
@@ -40,9 +40,9 @@ $(function() {
       </tr>
       <tr>
         <td>Notes:</td>
-        <td>{{ task.notes|default:'No notes entered.' }}</td>
+        <td>{{ task.notes|default('No notes entered.', true) }}</td>
       </tr>
     </table>
-    <p><a href="/tasks/task/edit/{{ task.key }}">Edit Task</a></p> 
+    <p><a href="/tasks/task/edit/{{ task.key.urlsafe() }}">Edit Task</a></p>
     <p><a href="/tasks">&lt; Back to Tasks</a></p>
 {% endblock %}

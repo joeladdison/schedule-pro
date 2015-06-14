@@ -28,7 +28,7 @@ $(function() {
 
 {%block formtitle %}Modify Event{% endblock %}
 {%block main_content %}
-    <form action="/calendar/event/edit/{{ event.key }}" method="post">
+    <form action="/calendar/event/edit/{{ event.key.urlsafe() }}" method="post">
     <table>
       <tr>
         <td width="150">Name:</td>
@@ -38,7 +38,7 @@ $(function() {
         <td>Calendar:</td>
         <td><select id="calendar" name="calendar">
             {% for cal in calendars %}
-              <option value="{{ cal.key }}"{% if cal.key == event.calendar.key %} selected="selected"{% endif %}>{{ cal.name }}</option>
+              <option value="{{ cal.key.urlsafe() }}"{% if cal.key == event.calendar.key %} selected="selected"{% endif %}>{{ cal.name }}</option>
             {% endfor %}
             </select>
         </td>
@@ -49,7 +49,7 @@ $(function() {
               <option value="None"{% if task.parent_task.key == None %} selected="selected"{% endif %}>No Parent</option>
             {% for t in tasks %}
               {% if t.key != task.key %}
-              <option value="{{ t.key }}"{% if task.parent_task.key == t.key %} selected="selected"{% endif %}>{{ t.name }}</option>
+              <option value="{{ t.key.urlsafe() }}"{% if task.parent_task.key == t.key %} selected="selected"{% endif %}>{{ t.name }}</option>
               {% endif %}
             {% endfor %}
             </select>
@@ -57,11 +57,11 @@ $(function() {
       </tr>
       <tr>
         <td>Start Date:</td>
-        <td><input name="start_date" id="start_date" type="text" value="{{ event.start_date|date:'Y-m-d' }}" /></td>
+        <td><input name="start_date" id="start_date" type="text" value="{{ event.start_date.strftime('%Y-%m-%d') }}" /></td>
       </tr>
       <tr>
         <td>End Date:</td>
-        <td><input name="due_date" id="due_date" type="text" value="{{ event.end_date|date:'Y-m-d' }}" /></td>
+        <td><input name="due_date" id="due_date" type="text" value="{{ event.end_date.strftime('%Y-%m-%d') }}" /></td>
       </tr>
       <tr>
         <td>Percent Complete:</td>
@@ -71,6 +71,6 @@ $(function() {
         </td>
       </tr>
     </table>
-    <input id="submit" name="submit" type="submit" value="Save Task" />    
+    <input id="submit" name="submit" type="submit" value="Save Task" />
     </form>
 {% endblock %}

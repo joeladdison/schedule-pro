@@ -12,7 +12,7 @@ $(document).ready(function(){
 
 {%block formtitle %}Modify Calendar{% endblock %}
 {%block main_content %}
-    <form action="/calendar/edit/{{ calendar.key }}" method="post">
+    <form action="/calendar/edit/{{ calendar.key.urlsafe() }}" method="post">
     <table>
       <tr>
         <td width="150">Name:</td>
@@ -22,9 +22,9 @@ $(document).ready(function(){
         <td>Share Type:</td>
         <td>
             <select id="share_type" name="share_type">
-              <option value="hybrid"{% if calendar.key == "hybrid" %} selected="selected"{% endif %}>Hybrid Sharing</option>
-              <option value="all_shared"{% if calendar.key == "all_shared" %} selected="selected"{% endif %}>All Shared</option>
-              <option value="not_shared"{% if calendar.key == "not_shared" %} selected="selected"{% endif %}>Not Shared</option>
+              <option value="hybrid"{% if calendar.share_type == "hybrid" %} selected="selected"{% endif %}>Hybrid Sharing</option>
+              <option value="all_shared"{% if calendar.share_type == "all_shared" %} selected="selected"{% endif %}>All Shared</option>
+              <option value="not_shared"{% if calendar.share_type == "not_shared" %} selected="selected"{% endif %}>Not Shared</option>
             </select>
         </td>
       </tr>
@@ -37,12 +37,12 @@ $(document).ready(function(){
         <td><select id="project" name="project">
               <option value="None"{% if calendar.project.key == None %} selected="selected"{% endif %}>Not assigned to Project</option>
             {% for p in projects %}
-              <option value="{{ p.key }}"{% if p.key == calendar.project.key %} selected="selected"{% endif %}>{{ p.name }}</option>
+              <option value="{{ p.key.urlsafe() }}"{% if p.key == calendar.project.key %} selected="selected"{% endif %}>{{ p.name }}</option>
             {% endfor %}
             </select>
         </td>
       </tr>
     </table>
-    <input id="submit" name="submit" type="submit" value="Save Calendar" />    
+    <input id="submit" name="submit" type="submit" value="Save Calendar" />
     </form>
 {% endblock %}

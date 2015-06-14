@@ -3,7 +3,7 @@
 
 {%block extra_head %}
 <script type='text/javascript' src='scripts/fullcalendar/fullcalendar.min.js'></script>
-<script type="text/javascript" src="scripts/jquery.qtip-1.0.0-rc3.min.js"></script> 
+<script type="text/javascript" src="scripts/jquery.qtip-1.0.0-rc3.min.js"></script>
 <script language="javascript" type="text/javascript">
 function load_calendar(cal_key, initialise) {
 	$.ajax({
@@ -28,7 +28,7 @@ function load_calendar(cal_key, initialise) {
                     cal_details.visible = !cal_details.visible;
                 }
                 if (cal_details.visible == true) {
-                    // Calendar currently visible, 
+                    // Calendar currently visible,
                     // Remove the calendar from eventSources, and reload
                     $('#calendar').fullCalendar('removeEventSource', ev_source);
                     $("#cal-" + cal_key).css({'background-color': '#fff', 'color':'#000'});
@@ -41,7 +41,7 @@ function load_calendar(cal_key, initialise) {
                 // Set the calendar to be visible/not visible
                 $.post(
                         '/ajax/c/details',
-                        {calendar: cal_key, visible: !cal_details.visible} 
+                        {calendar: cal_key, visible: !cal_details.visible}
                 );
             }
 	});
@@ -50,14 +50,14 @@ function load_calendar(cal_key, initialise) {
 function initialise_calendar() {
 	$('div#calendar-list div').each(function() {
 		cal_key = this.id.slice(4);
-        load_calendar(cal_key, true);        
+        load_calendar(cal_key, true);
 	});
 }
 
 $(document).ready(function(){
 
-    $.ajaxSetup ({  
-        cache: false  
+    $.ajaxSetup ({
+        cache: false
     });
     // Show small calendar in sidebar-left
     $('#small_calendar').datepicker();
@@ -78,10 +78,10 @@ $(document).ready(function(){
         defaultView: 'month',
         eventRender: function(event, element, view)
         {
-            element.qtip({ 
+            element.qtip({
                 content: {
                     title: {text: event.title, button: 'x' },
-                    
+
                     text: "Start: " + event.start
                 },
                 position: {
@@ -114,7 +114,7 @@ $(document).ready(function(){
 
 {%block title %} | Calendar{% endblock %}
 
-{%block sidebar-left %}
+{%block sidebar_left %}
     <div class="panel">
         <div id="small_calendar"></div>
     </div>
@@ -122,7 +122,7 @@ $(document).ready(function(){
         <h3>My Calendars</h3>
         <div id="calendar-list">
         {% for cal in calendars %}
-            <div id="cal-{{ cal.key }}" class="button" style="background-color:{{ cal.colour }}">{{ cal.name }}</div>
+            <div id="cal-{{ cal.key.urlsafe() }}" class="button" style="background-color:{{ cal.colour }}">{{ cal.name }}</div>
         {% endfor %}
         </div>
         <p class="small-links"><a href="/calendar/add">Add Calendar</a></p>
