@@ -18,10 +18,12 @@ class AccountCreateHandler(views.BaseHandler):
 
     def post(self):
         """ Process the new Account data and store in the database """
+        current_user = users.get_current_user()
         account = models.UserAccount()
         account.first_name = self.request.get("first_name")
         account.last_name = self.request.get("last_name")
-        account.userid = users.get_current_user().user_id()
+        account.userid = current_user.user_id()
+        account.email = current_user.email()
         account.put()
 
         task_list = models.TaskList()

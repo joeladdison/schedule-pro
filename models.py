@@ -12,6 +12,7 @@ class UserAccount(ndb.Model):
     first_name = ndb.StringProperty()
     last_name = ndb.StringProperty()
     userid = ndb.StringProperty()
+    email = ndb.StringProperty()
 
     @property
     def name(self):
